@@ -1,0 +1,46 @@
+CREATE  TABLE IF NOT EXISTS `mydb`.`tb_categorias` (
+  `id_categoria` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `nombre_categoria` VARCHAR(100) NULL ,
+  `descripcion_categoria` TEXT NULL ,
+  PRIMARY KEY (`id_categoria`) )
+ENGINE = InnoDB
+
+
+CREATE  TABLE IF NOT EXISTS `mydb`.`tb_usuario` (
+  `id_usuario` INT NOT NULL ,
+  `login_usuario`  VARCHAR(50) NOT NULL,
+  `password_usuario`  VARCHAR(20) NOT NULL,
+  `nombre_usuario`  VARCHAR(50) NOT NULL,
+  `apellido1_usuario`  VARCHAR(50) NOT NULL,
+  `apellido2_usuario`  VARCHAR(50) NOT NULL,
+  `direccion_usuario`  VARCHAR(250) NOT NULL,
+  `telefono_usuario`  VARCHAR(15) NOT NULL,
+  `email_usuario` VARCHAR(100) NOT NULL,
+  `forma_pago` Enum(”Tarjeta”,"Contra Reembolso", "Pay-Pal"),
+  PRIMARY KEY (`idtb_usuario`) )
+ENGINE = InnoDB
+
+CREATE  TABLE IF NOT EXISTS `mydb`.`tb_facturas` (
+  `id_factura` INT NOT NULL AUTO_INCREMENT ,
+  `id_usuario` VARCHAR(100) NULL ,
+  `direccion_factura` VARCHAR(250),
+  `fecha_factura` DATETIME,
+   PRIMARY KEY (`id_factura`) )
+ENGINE = InnoDB
+
+CREATE  TABLE IF NOT EXISTS `mydb`.`tb_productos` (
+  `id_producto` INT NOT NULL AUTO_INCREMENT ,
+  `nombre_producto` VARCHAR(100) NULL ,
+  `descripcion_producto` TEXT NULL ,
+  `enlace_producto` VARCHAR(100) NULL ,
+  `id_categorial` INT UNSIGNED NULL ,
+  PRIMARY KEY (`id_producto`) )
+ENGINE = InnoDB
+
+CREATE  TABLE IF NOT EXISTS `mydb`.`tb_facturas_productos` (
+  `id_producto` INT NOT NULL AUTO_INCREMENT ,
+  `id_factura` VARCHAR(100) INT NOT NULL AUTO_INCREMENT )
+  
+  ENGINE = InnoDB
+
+
