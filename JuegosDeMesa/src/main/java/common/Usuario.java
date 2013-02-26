@@ -176,11 +176,28 @@ public class Usuario {
         return "Usuario{" + "id=" + id + ", loginUsuario=" + loginUsuario + ", passwordUsuario=" + passwordUsuario + ", nombreUsuario=" + nombreUsuario + ", apellido1Usuario=" + apellido1Usuario + ", apellido2Usuario=" + apellido2Usuario + ", direccionUsuario=" + direccionUsuario + ", telefonoUsuario=" + telefonoUsuario + ", emailUsuario=" + emailUsuario + ", formaPago=" + formaPago + '}';
     }
     
+        @Override
+    public Usuario clone() {
+        Usuario usuario1 = new Usuario();
+        usuario1.setId(this.getId());
+        usuario1.setLoginUsuario(this.getLoginUsuario());
+        usuario1.setPasswordUsuario(this.getPasswordUsuario());
+        usuario1.setNombreUsuario(this.getNombreUsuario());
+        usuario1.setApellido1Usuario(this.getApellido1Usuario());
+        usuario1.setApellido2Usuario(this.getApellido2Usuario());
+        usuario1.setDireccionUsuario(this.getDireccionUsuario());
+        usuario1.setEmailUsuario(this.getEmailUsuario());
+        usuario1.setTelefonoUsuario(this.getTelefonoUsuario());
+        usuario1.setFormaPago(this.getFormaPago());
+        return usuario1;
+    }
+    
+    
       public static Usuario findById(EntityManager em, long id) {
         return em.find(Usuario.class, id);
     }
 
-    public static boolean containsAuthor(EntityManager em, long id) {
+    public static boolean containsUsuario(EntityManager em, long id) {
         return em.find(Usuario.class, id) != null;
     }
 
@@ -191,6 +208,12 @@ public class Usuario {
         return count;
     }
 
+       public static List<Usuario> findAll(EntityManager em) {
+        String sql = "SELECT x FROM Usuario x ORDER BY x.loginUsuario";
+        TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
+        return query.getResultList();
+    }
+       
     public static Usuario findByLoginUsuario(EntityManager em, String loginUsuario) {
         String sql = "SELECT x FROM Usuario x WHERE x.loginUsuario = :loginUsuario";
         TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
