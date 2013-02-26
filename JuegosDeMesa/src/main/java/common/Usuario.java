@@ -221,18 +221,18 @@ public class Usuario implements Serializable  {
         return query.getSingleResult();
     }
     
-       public static Usuario findByNombreUsuario(EntityManager em, String nombreUsuario) {
+       public static List<Usuario> findByNombreUsuario(EntityManager em, String nombreUsuario) {
         String sql = "SELECT x FROM Usuario x WHERE x.nombreUsuario = :nombreUsuario";
         TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
         query.setParameter("nombreUsuario", nombreUsuario);
-        return query.getSingleResult();
+        return query.getResultList();
     }
     
-      public static Usuario findByApellido1Usuario(EntityManager em, String apellido1Usuario) {
+      public static List<Usuario> findByApellido1Usuario(EntityManager em, String apellido1Usuario) {
         String sql = "SELECT x FROM Usuario x WHERE x.apellido1Usuario = :apellido1Usuario";
         TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
         query.setParameter("apellido1Usuario", apellido1Usuario);
-        return query.getSingleResult();
+        return query.getResultList();
     }
            
     

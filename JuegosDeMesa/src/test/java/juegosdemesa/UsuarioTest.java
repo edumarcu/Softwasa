@@ -68,22 +68,59 @@ public class UsuarioTest {
 
     @Test
 
-    public void test_addUsuario_UsuarioExists() {
-       /* 
-        user1.create(em);
-                
+    public void test_addUsuario_UsuarioExists() {     
+        user1.create(em);            
         boolean result = user1.create(em);
         assertFalse(result);
         
         Usuario usuario = user1.clone();
-        user3.setId(3);
-        result = user2.create(em);
+        usuario.setId(0);
+        
+        result = usuario.create(em);
         assertFalse(result);
 
         assertEquals(1, Usuario.count(em));
-     
-        */
-   
+         
     }
      
+      @Test
+    public void test_removeBook() {
+        user1.create(em);
+        boolean result = user1.remove(em);
+        assertTrue(result);
+
+        result = user1.remove(em);
+        assertFalse(result);
+
+        assertFalse(Usuario.containsUsuario(em, user1.getId()));
+        assertEquals(0, Usuario.count(em));
+    }
+    
+       @Test
+    public void test_list() {
+
+        user1.create(em);
+        user2.create(em);
+        user3.create(em);
+
+        Usuario[] expected = new Usuario[]{user1, user2, user3};
+
+        Usuario[] usuarios = Usuario.findAll(em).toArray(new Usuario[0]);
+        assertEquals(3, usuarios.length);
+        assertArrayEquals(expected, usuarios);
+    }
+    
+         @Test
+    public void test_findByid() {
+        user1.create(em);
+        user2.create(em);
+        user3.create(em);
+
+        Usuario result = Usuario.findById(em, user2.getId());
+
+        assertEquals(user2, result);
+    }
+         
+       
+       
 }
