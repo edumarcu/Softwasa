@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,7 +24,7 @@ import org.junit.Test;
  *
  * @author Usuario
  */
-/*
+
 public class ProductoTest {
     
     private EntityManager em;
@@ -82,11 +83,12 @@ public class ProductoTest {
         boolean result = producto1.insertarProducto(em);
         result = result && producto1.insertarProducto(em);
         assertTrue(result);
-        //
-        assertTrue(Producto.containsBook(em, Producto.getId()));
-        assertEquals(1, Book.count(em));
+        /*
+        assertTrue(Producto.contieneProducto(em, Producto.getId()));
+        assertEquals(1, Producto.Contar(em));
 
-        assertEquals(bhp1, Book.findById(em, bhp1.getId()));
+        assertEquals(bhp1, Producto.findById(em, producto1.getId()));
+        * */
     }
     /*
     @Test
@@ -105,7 +107,6 @@ public class ProductoTest {
 
         assertEquals(1, Book.count(em));
     }
-    
+   */ 
     
 }
-*/

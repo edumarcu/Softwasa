@@ -49,7 +49,12 @@ public class Producto {
         this.descripcion_producto=descripcion_producto;
         this.enlace_producto=enlace_producto;
     }
-
+    public Producto(Long id,String nombre_producto,String descripcion_producto,String enlace_producto){
+        this.id=id;
+        this.nombre_producto=nombre_producto;
+        this.descripcion_producto=descripcion_producto;
+        this.enlace_producto=enlace_producto;
+    }
     public Long getId() {
         return id;
     }
@@ -162,6 +167,9 @@ public class Producto {
         } else {
             return false;
         }
+    }
+    public static boolean contieneProducto(EntityManager em, long id) {
+        return em.find(Producto.class, id) != null;
     }
     public static List<Producto> listarProductos(EntityManager em){
         String sql = "SELECT x FROM Producto x ORDER BY x.title";
