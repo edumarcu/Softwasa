@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+//import javax.persistence.Transient;
 
 /**
  * Categoria de Juego
@@ -33,9 +33,9 @@ public class Categoria implements Serializable {
 
     @Column(nullable=false)
     private String descripcion_categoria;
-
-    @Transient
-    private Set<Producto> productos;
+//
+//    @Transient
+//    private Set<Producto> productos;
 
     /* Constructor */
 
@@ -46,7 +46,7 @@ public class Categoria implements Serializable {
         this.id = id;
         this.nombre_categoria = nombre_categoria;
         this.descripcion_categoria = descripcion_categoria;
-        this.productos = null;
+//        this.productos = null;
     }
 
     /* Getters and Setters */
@@ -75,13 +75,13 @@ public class Categoria implements Serializable {
         this.descripcion_categoria = descripcion_categoria;
     }
 
-    public Set<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(Set<Producto> productos) {
-        this.productos = productos;
-    }
+//    public Set<Producto> getProductos() {
+//        return productos;
+//    }
+//
+//    public void setProductos(Set<Producto> productos) {
+//        this.productos = productos;
+//    }
 
     /* Utils */
 

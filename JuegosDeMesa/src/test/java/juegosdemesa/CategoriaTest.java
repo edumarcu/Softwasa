@@ -45,8 +45,9 @@ public class CategoriaTest {
     }
 
     @Test
-    public void test_create_categoria() {
+    public void test_create_categoriaNoExistente() {
         assertTrue(jRol.create(em));
+//        assertTrue(em.contains(jRol));
     }
 
 }
