@@ -20,39 +20,35 @@ import javax.persistence.TypedQuery;
  *
  * @author Jose Miguel
  */
+@Entity
+@Table(name="tb_usuarios")
 public class Usuario {
     
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) 
     private long id;
+    
+    @Column(name="login_usuario", length=50, nullable=false)
     private String loginUsuario;
+    @Column(name="password_usuario", length=20, nullable=false)
     private String passwordUsuario;
+    @Column(name="nombre_usuario", length=50, nullable=false)   
     private String nombreUsuario;
+    @Column(name="apellido1_usuario", length=50, nullable=false)  
     private String apellido1Usuario;
+    @Column(name="apellido2_usuario", length=50, nullable=false)  
     private String apellido2Usuario;
+    @Column(name="direccion_usuario", length=250, nullable=false)
     private String direccionUsuario;
+    @Column(name="telefono_usuario", length=15, nullable=false)
     private String telefonoUsuario;
+    @Column(name="direccion_usuario", length=100, nullable=false)
     private String emailUsuario;
+    @Column(name="forma_Pago", nullable=false)
     private String formaPago;
 
-    
-     /*
-    CREATE  TABLE IF NOT EXISTS `mydb`.`tb_usuarios` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `login_usuario`  VARCHAR(50) NOT NULL,
-  `password_usuario`  VARCHAR(20) NOT NULL,
-  `nombre_usuario`  VARCHAR(50) NOT NULL,
-  `apellido1_usuario`  VARCHAR(50) NOT NULL,
-  `apellido2_usuario`  VARCHAR(50) NOT NULL,
-  `direccion_usuario`  VARCHAR(250) NOT NULL,
-  `telefono_usuario`  VARCHAR(15) NOT NULL,
-  `email_usuario` VARCHAR(100) NOT NULL,
-  `forma_pago` ENUM('Tarjeta', 'Contra Reembolso', 'Pay-Pal'),
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
- 
-  */
+
     public Usuario() {
     }
 
@@ -180,8 +176,92 @@ ENGINE = InnoDB
         return "Usuario{" + "id=" + id + ", loginUsuario=" + loginUsuario + ", passwordUsuario=" + passwordUsuario + ", nombreUsuario=" + nombreUsuario + ", apellido1Usuario=" + apellido1Usuario + ", apellido2Usuario=" + apellido2Usuario + ", direccionUsuario=" + direccionUsuario + ", telefonoUsuario=" + telefonoUsuario + ", emailUsuario=" + emailUsuario + ", formaPago=" + formaPago + '}';
     }
     
+      public static Usuario findById(EntityManager em, long id) {
+        return em.find(Usuario.class, id);
+    }
+
+    public static boolean containsAuthor(EntityManager em, long id) {
+        return em.find(Usuario.class, id) != null;
+    }
+
+    public static long count(EntityManager em) {
+        String sql = "SELECT COUNT(x) FROM Usuario x";
+        TypedQuery<Long> query = em.createQuery(sql, Long.class);
+        Long count = query.getSingleResult();
+        return count;
+    }
+
+    public static Usuario findByLoginUsuario(EntityManager em, String loginUsuario) {
+        String sql = "SELECT x FROM Usuario x WHERE x.loginUsuario = :loginUsuario";
+        TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
+        query.setParameter("loginUsuario", loginUsuario);
+        return query.getSingleResult();
+    }
     
+       public static Usuario findByNombreUsuario(EntityManager em, String nombreUsuario) {
+        String sql = "SELECT x FROM Usuario x WHERE x.nombreUsuario = :nombreUsuario";
+        TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
+        query.setParameter("nombreUsuario", nombreUsuario);
+        return query.getSingleResult();
+    }
     
-   
-  
+      public static Usuario findByApellido1Usuario(EntityManager em, String apellido1Usuario) {
+        String sql = "SELECT x FROM Usuario x WHERE x.apellido1Usuario = :apellido1Usuario";
+        TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
+        query.setParameter("apellido1Usuario", apellido1Usuario);
+        return query.getSingleResult();
+    }
+           
+    
+    // Modifying
+
+    public boolean create(EntityManager em) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            createNoTransaction(em);
+            et.commit();
+            return true;
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+//            throw new Exception("Error saving user");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void createNoTransaction(EntityManager em) {
+        em.persist(this);
+        em.flush();
+    }
+    
+    public boolean remove(EntityManager em) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            boolean res = removeNoTransaction(em);
+            et.commit();
+            return res;
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+//            throw new Exception("Error saving user");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removeNoTransaction(EntityManager em) {
+        if (em.find(Usuario.class, this.getId()) != null) {
+            em.remove(this);
+            em.flush();
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }
