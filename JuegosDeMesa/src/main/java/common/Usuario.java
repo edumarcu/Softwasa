@@ -22,7 +22,7 @@ import javax.persistence.TypedQuery;
  */
 @Entity
 @Table(name="tb_usuarios")
-public class Usuario {
+public class Usuario implements Serializable  {
     
     
     @Id
@@ -43,7 +43,7 @@ public class Usuario {
     private String direccionUsuario;
     @Column(name="telefono_usuario", length=15, nullable=false)
     private String telefonoUsuario;
-    @Column(name="direccion_usuario", length=100, nullable=false)
+    @Column(name="email_usuario", length=100, nullable=false)
     private String emailUsuario;
     @Column(name="forma_Pago", nullable=false)
     private String formaPago;
