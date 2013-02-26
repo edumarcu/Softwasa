@@ -1,8 +1,11 @@
 
 package common;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -22,7 +26,7 @@ public class Producto {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     
     @Column(length=100, nullable=true)
     private String nombre_producto;
@@ -46,7 +50,7 @@ public class Producto {
         this.enlace_producto=enlace_producto;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -66,7 +70,7 @@ public class Producto {
         return categoria;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -88,8 +92,8 @@ public class Producto {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + this.id;
+        int hash = 5;
+        hash = 97 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
 
@@ -102,10 +106,86 @@ public class Producto {
             return false;
         }
         final Producto other = (Producto) obj;
-        if (this.id != other.id) {
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
             return false;
         }
         return true;
     }
+
+    
+    public boolean insertarProducto(EntityManager em){
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            boolean res = insertarProductoNoTransaction(em);
+            et.commit();
+            return res;
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+//            throw new Exception("Error saving user");
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean insertarProductoNoTransaction(EntityManager em){
+         if (em.contains(this)) {
+            return false;
+        } else {
+            em.persist(this);
+            em.flush();
+            return true;
+        }
+    }
+    public boolean eliminarProducto(EntityManager em){
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            boolean res = eliminarProductoNoTransaction(em);
+            et.commit();
+            return res;
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+//            throw new Exception("Error saving user");
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean eliminarProductoNoTransaction(EntityManager em){
+         if (em.find(Producto.class, this.getId()) != null) {
+            em.remove(this);
+            em.flush();
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static List<Producto> listarProductos(EntityManager em){
+        String sql = "SELECT x FROM Producto x ORDER BY x.title";
+        TypedQuery<Producto> query = em.createQuery(sql, Producto.class);
+        return query.getResultList();
+    }
+    public static Producto listarProductoPorId(EntityManager em,Long id){
+         return em.find(Producto.class, id);
+    }
+    public static Producto listarProductoPorNombre(EntityManager em,String nombre){
+        return em.find(Producto.class, nombre);
+    }
+    public static List<Producto> listarProductoPorCategoria(EntityManager em,Categoria categoria){
+        String sql = "SELECT x FROM Producto x WHERE x.categoria = :categoria";
+        TypedQuery<Producto> query = em.createQuery(sql, Producto.class);
+        query.setParameter("categoria", categoria);
+        return query.getResultList();
+    }
+    public static Long Contar(EntityManager em){
+        String sql = "SELECT COUNT(x) FROM Producto x";
+        TypedQuery<Long> query = em.createQuery(sql, Long.class);
+        Long count = query.getSingleResult();
+        return count;
+    }
+    
     
 }
