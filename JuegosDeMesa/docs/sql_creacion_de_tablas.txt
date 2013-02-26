@@ -28,7 +28,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`tb_productos` (
   `nombre_producto` VARCHAR(100) NULL ,
   `descripcion_producto` TEXT NULL ,
   `enlace_producto` VARCHAR(100) NULL ,
-  `id_categorial` INT UNSIGNED NULL ,
+  `id_categoria` INT UNSIGNED NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 
