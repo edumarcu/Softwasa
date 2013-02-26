@@ -2,7 +2,7 @@
 
 CREATE  TABLE IF NOT EXISTS `mydb`.`tb_categorias` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `nombre_categoria` VARCHAR(100) NULL ,
+  `nombre_categoria` VARCHAR(100) NOT NULL ,
   `descripcion_categoria` TEXT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
