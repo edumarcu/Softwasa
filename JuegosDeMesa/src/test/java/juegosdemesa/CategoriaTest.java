@@ -47,7 +47,38 @@ public class CategoriaTest {
     @Test
     public void test_create_categoriaNoExistente() {
         assertTrue(jRol.create(em));
-//        assertTrue(em.contains(jRol));
+        assertTrue(em.contains(jRol));
+    }
+
+    @Test
+    public void test_create_categoriaExistente() {
+        assertTrue(jRol.create(em));
+        assertTrue(em.contains(jRol));
+        assertFalse(jRol.create(em));
+        assertTrue(em.contains(jRol));
+    }
+
+    @Test
+    public void test_update_categoriaNoExistente() {
+        assertFalse(em.contains(jRol));
+        jRol.setDescripcion_categoria("Juegos para gente que le guste el Rol");
+        assertFalse(jRol.update(em));
+        assertFalse(em.contains(jRol));
+    }
+
+    @Test
+    public void test_update_categoriaExistente() {
+        assertFalse(em.contains(jRol));
+        assertTrue(jRol.create(em));
+        assertTrue(em.contains(jRol));
+
+        String descripcion = "Juegos para gente que le guste el Rol";
+        jRol.setDescripcion_categoria(descripcion);
+        assertTrue(jRol.update(em));
+
+        assertTrue(em.contains(jRol));
+        assertEquals(descripcion, jRol.getDescripcion_categoria());
+
     }
 
 }
