@@ -1,11 +1,5 @@
 package juegosdemesa;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.ParseException;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -21,20 +15,6 @@ public class ConexionBDTest  {
 
     @Before
     public void beforeTest()  {
-//        String url = "jdbc:mysql://127.0.0.1/mydb";
-//        String user = "root";
-//        String pass = "password";
-//        Connection conn = DriverManager.getConnection(url, user, pass);
-//
-//        Statement stmt1 = conn.createStatement();
-//        stmt1.execute("TRUNCATE TABLE books");
-//        stmt1.close();
-//
-//        Statement stmt2 = conn.createStatement();
-//        stmt2.execute("TRUNCATE TABLE authors");
-//        stmt2.close();
-//
-//        conn.close();
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("juegosDeMesaPU");
         em = emf.createEntityManager();
@@ -46,6 +26,6 @@ public class ConexionBDTest  {
 
         Query query = em.createNativeQuery(sql);
 
-        assertEquals(1, query.getSingleResult());
+        assertEquals(1L, query.getSingleResult());
     }
 }
