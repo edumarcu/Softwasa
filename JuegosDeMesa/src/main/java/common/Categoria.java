@@ -1,8 +1,11 @@
 package common;
 
+import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +22,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="tb_categorias")
-public class Categoria {
+public class Categoria implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -109,6 +112,88 @@ public class Categoria {
         return "Categoria: [id=" + id + ",nombre=" + nombre_categoria + ",desc=" + descripcion_categoria + "]";
     }
 
+    /* Active Record */
+    /* Modify */
+    public boolean create(EntityManager em) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            boolean res = createNoTransaction(em);
+            et.commit();
 
+            return res;
+
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean createNoTransaction(EntityManager em) {
+        if (em.contains(this)) {
+            return false;
+        } else {
+            em.persist(this);
+            em.flush();
+            return true;
+        }
+    }
+
+     public boolean update(EntityManager em) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            boolean res = updateNoTransaction(em);
+            et.commit();
+            return res;
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateNoTransaction(EntityManager em) {
+        if (em.find(Categoria.class, this.getId()) != null) {
+            em.merge(this);
+            em.flush();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean remove(EntityManager em) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            boolean res = removeNoTransaction(em);
+            et.commit();
+            return res;
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removeNoTransaction(EntityManager em) {
+        if (em.find(Categoria.class, this.getId()) != null) {
+            em.remove(this);
+            em.flush();
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
