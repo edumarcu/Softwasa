@@ -7,7 +7,7 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`tb_categorias` (
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 
-CREATE  TABLE IF NOT EXISTS `mydb`.`tb_usuario` (
+CREATE  TABLE IF NOT EXISTS `mydb`.`tb_usuarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `login_usuario`  VARCHAR(50) NOT NULL,
   `password_usuario`  VARCHAR(20) NOT NULL,
