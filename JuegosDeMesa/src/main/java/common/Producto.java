@@ -205,6 +205,31 @@ public class Producto {
         Long count = query.getSingleResult();
         return count;
     }
-    
+    public boolean Modificar(EntityManager em) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            boolean res = ModificarNoTransaction(em);
+            et.commit();
+            return res;
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean ModificarNoTransaction(EntityManager em) {
+        if (em.find(Categoria.class, this.getId()) != null) {
+            em.merge(this);
+            em.flush();
+            return true;
+        } else {
+            return false;
+        }
+    }
     
 }

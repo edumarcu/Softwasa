@@ -108,7 +108,14 @@ public class ProductoTest {
 
         assertEquals(1, (long)Producto.Contar(em));
     }
-    
+    @Test
+    public void test_Modificar(){
+        categoria1.create(em);
+        producto1.insertarProducto(em);
+        producto1.setNombre_producto("cosa");
+        boolean result=producto1.Modificar(em);
+        assertTrue(result);
+    }
     @Test
     //@Ignore
     public void test_EliminarProducto(){
