@@ -76,9 +76,9 @@ public class UsuarioTest {
         usuario.setId(0);
 
         result = usuario.create(em);
-        assertTrue(result);
+        assertFalse(result);
 
-        assertEquals(2, Usuario.count(em));
+        assertEquals(1, Usuario.count(em));
 
     }
 
@@ -184,4 +184,22 @@ public class UsuarioTest {
         assertEquals(expected, usuarios);
 
     }
+    
+        @Test
+    public void test_findByUsuario() {
+
+        user1.create(em);
+        user2.create(em);
+        user3.create(em);
+
+        List<Usuario> expected = new ArrayList<Usuario>();
+        expected.add(user2);
+
+        List<Usuario> usuarios = Usuario.findByUsuario(em, user2.getNombreUsuario(), null,null);
+        assertEquals(expected, usuarios);
+
+    }
+    
+    
+    
 }

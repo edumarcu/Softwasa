@@ -33,6 +33,13 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`tb_productos` (
 ENGINE = InnoDB
 
 
+//Modificacion 1 - Añadir unike key a login usuario
+
+ALTER TABLE tb_usuarios ADD UNIQUE (login_usuario)
+
+
+
+
 
 
 

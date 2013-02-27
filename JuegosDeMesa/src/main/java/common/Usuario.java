@@ -221,13 +221,35 @@ public class Usuario implements Serializable  {
         return query.getSingleResult();
     }
     
-       public static List<Usuario> findByNombreUsuario(EntityManager em, String nombreUsuario) {
+       public static List<Usuario> findByUsuario(EntityManager em, String nombreUsuario,String apellido1Usuario,String apellido2Usuario) {
+        String sql = "SELECT x FROM Usuario x WHERE x.nombreUsuario LIKE :nombreUsuario AND x.apellido1Usuario LIKE :apellido1Usuario AND x.apellido2Usuario LIKE :apellido2Usuario";
+        TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
+        
+        if ( nombreUsuario == null || nombreUsuario.trim() == "" ) {
+            nombreUsuario = "%";
+       }
+         if ( apellido1Usuario == null || apellido1Usuario.trim() == "" ) {
+            apellido1Usuario = "%";
+       }
+          if ( apellido2Usuario == null || apellido2Usuario.trim() == "" ) {
+            apellido2Usuario = "%";
+       }
+          
+        query.setParameter("nombreUsuario", nombreUsuario);
+        query.setParameter("apellido1Usuario", apellido1Usuario);
+        query.setParameter("apellido2Usuario", apellido2Usuario);
+        
+        return query.getResultList();
+    }
+    
+       
+        public static List<Usuario> findByNombreUsuario(EntityManager em, String nombreUsuario) {
         String sql = "SELECT x FROM Usuario x WHERE x.nombreUsuario = :nombreUsuario";
         TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
         query.setParameter("nombreUsuario", nombreUsuario);
         return query.getResultList();
     }
-    
+             
       public static List<Usuario> findByApellido1Usuario(EntityManager em, String apellido1Usuario) {
         String sql = "SELECT x FROM Usuario x WHERE x.apellido1Usuario = :apellido1Usuario";
         TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
