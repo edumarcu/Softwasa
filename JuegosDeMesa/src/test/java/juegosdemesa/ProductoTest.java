@@ -62,10 +62,10 @@ public class ProductoTest {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("juegosDeMesaPU");
         em = emf.createEntityManager();
 
-        categoria1=new Categoria(1,"Juegos para niños","Juego simple");
-        categoria2=new Categoria(2,"Juegos para adolescentes","Juego menos simple");
-        categoria3=new Categoria(3,"Juegos para adultos","Juego complejo");
-        categoria4=new Categoria(4,"Juegos para ancianos","Juego muy complejo");
+        categoria1=new Categoria("Juegos para niños","Juego simple");
+        categoria2=new Categoria("Juegos para adolescentes","Juego menos simple");
+        categoria3=new Categoria("Juegos para adultos","Juego complejo");
+        categoria4=new Categoria("Juegos para ancianos","Juego muy complejo");
         
         producto1=new Producto("Cartago contra Roma","Cartago lucha contra Roma","http://www.planetongames.com/sword-rome-2010-reprint-p-2403.html");
         producto1.setCategoria(categoria1);
