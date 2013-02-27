@@ -204,7 +204,7 @@ public class Categoria implements Serializable {
     }
 
     public boolean createNoTransaction(EntityManager em) {
-        if (em.contains(this)) {
+        if (em.find(Categoria.class, this.getId()) != null) {
             return false;
         } else {
             em.persist(this);
