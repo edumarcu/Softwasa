@@ -1,7 +1,9 @@
 package common;
 
 import java.io.Serializable;
-import java.util.Set;
+
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -10,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.TypedQuery;
 //import javax.persistence.Transient;
 
 /**
@@ -40,6 +43,11 @@ public class Categoria implements Serializable {
     /* Constructor */
 
     public Categoria() {
+    }
+
+    public Categoria(String nombre_categoria, String descripcion_categoria) {
+        this.nombre_categoria = nombre_categoria;
+        this.descripcion_categoria = descripcion_categoria;
     }
 
     public Categoria(long id, String nombre_categoria, String descripcion_categoria) {
@@ -112,8 +120,71 @@ public class Categoria implements Serializable {
         return "Categoria: [id=" + id + ",nombre=" + nombre_categoria + ",desc=" + descripcion_categoria + "]";
     }
 
-    /* Active Record */
-    /* Modify */
+    /************************************************************************************ Active Record */
+    /******************************************************************** R */
+    public static List<Categoria> list(EntityManager em) {
+        String sql = "SELECT c FROM Categoria c";
+        TypedQuery<Categoria> query = em.createQuery(sql, Categoria.class);
+        return query.getResultList();
+    }
+
+    public static Categoria findById(EntityManager em, long id) {
+        return em.find(Categoria.class, id);
+    }
+
+    public static Categoria findByNombre(EntityManager em, String nombre) {
+        String sql = "SELECT c FROM Categoria c WHERE c.nombre_categoria = :nombre";
+        TypedQuery<Categoria> query = em.createQuery(sql, Categoria.class);
+        query.setParameter("nombre", nombre);
+
+        /* si no encuantra lanza exception */
+        try {
+            return query.getSingleResult();
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static  List<Categoria> findLikeNombre(EntityManager em, String nombre) {
+        String sql = "SELECT c FROM Categoria c WHERE c.nombre_categoria LIKE :nombre";
+        TypedQuery<Categoria> query = em.createQuery(sql, Categoria.class);
+        query.setParameter("nombre", "%" + nombre + "%");
+
+        return query.getResultList();
+    }
+
+    public static Categoria findByDescripcion(EntityManager em, String descripcion) {
+        String sql = "SELECT c FROM Categoria c WHERE c.descripcion_categoria = :descripcion";
+        TypedQuery<Categoria> query = em.createQuery(sql, Categoria.class);
+        query.setParameter("descripcion", descripcion);
+
+        if (query.getResultList().isEmpty()) {
+            return null;
+        }
+        else {
+            return query.getSingleResult();
+        }
+    }
+
+    public static  List<Categoria> findLikeDescripcion(EntityManager em, String descripcion) {
+        String sql = "SELECT c FROM Categoria c WHERE c.descripcion_categoria LIKE :descripcion";
+        TypedQuery<Categoria> query = em.createQuery(sql, Categoria.class);
+        query.setParameter("descripcion", "%" + descripcion + "%");
+
+        return query.getResultList();
+    }
+
+    /************************************************ Utils */
+    public static boolean contains(EntityManager em, long id) {
+        return em.find(Categoria.class, id) != null;
+    }
+
+    public static long count(EntityManager em) {
+        return list(em).size();
+    }
+
+    /****************************************************** CUD */
     public boolean create(EntityManager em) {
         EntityTransaction et = em.getTransaction();
         try {
