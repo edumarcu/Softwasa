@@ -40,7 +40,7 @@ public class Producto {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="id_categoria", referencedColumnName="id")
     private Categoria categoria;
-    
+   
     public Producto(){
         
     }
@@ -49,7 +49,7 @@ public class Producto {
         this.descripcion_producto=descripcion_producto;
         this.enlace_producto=enlace_producto;
     }
-    public Producto(Long id,String nombre_producto,String descripcion_producto,String enlace_producto){
+    public Producto(long id,String nombre_producto,String descripcion_producto,String enlace_producto){
         this.id=id;
         this.nombre_producto=nombre_producto;
         this.descripcion_producto=descripcion_producto;
@@ -180,15 +180,18 @@ public class Producto {
         return em.find(Producto.class, id) != null;
     }
     public static List<Producto> listarProductos(EntityManager em){
-        String sql = "SELECT x FROM Producto x ORDER BY x.title";
+        String sql = "SELECT x FROM Producto x ORDER BY x.id";
         TypedQuery<Producto> query = em.createQuery(sql, Producto.class);
         return query.getResultList();
     }
     public static Producto listarProductoPorId(EntityManager em,Long id){
          return em.find(Producto.class, id);
     }
-    public static Producto listarProductoPorNombre(EntityManager em,String nombre){
-        return em.find(Producto.class, nombre);
+    public static List<Producto> listarProductoPorNombre(EntityManager em,String nombre){
+        String sql = "SELECT x FROM Producto x WHERE x.nombre_producto = :nombre";
+        TypedQuery<Producto> query = em.createQuery(sql, Producto.class);
+        query.setParameter("nombre", nombre);
+        return query.getResultList();
     }
     public static List<Producto> listarProductoPorCategoria(EntityManager em,Categoria categoria){
         String sql = "SELECT x FROM Producto x WHERE x.categoria = :categoria";

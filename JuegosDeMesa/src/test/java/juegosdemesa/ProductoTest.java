@@ -45,9 +45,9 @@ public class ProductoTest {
     
     @Before
     public void AntesDelTest() throws SQLException{
-        String url = "jdbc:mysql://127.0.0.1/test";
+        String url = "jdbc:mysql://127.0.0.1/mydb";
         String user = "root";
-        String pass = "";
+        String pass = "password";
         Connection conn = DriverManager.getConnection(url, user, pass);
         Statement stmt1 = conn.createStatement();
         stmt1.execute("TRUNCATE TABLE tb_productos");
@@ -59,7 +59,7 @@ public class ProductoTest {
 
         conn.close();
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("cursoDemoPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("juegosDeMesaPU");
         em = emf.createEntityManager();
 
         categoria1=new Categoria(1,"Juegos para niños","Juego simple");
@@ -70,51 +70,49 @@ public class ProductoTest {
         producto1=new Producto("Cartago contra Roma","Cartago lucha contra Roma","http://www.planetongames.com/sword-rome-2010-reprint-p-2403.html");
         producto1.setCategoria(categoria1);
         producto2=new Producto("The Havre","Juego de barcos y comida","http://www.planetongames.com/le-havre-p-1572.html");
-        producto1.setCategoria(categoria1);
+        producto2.setCategoria(categoria1);
         producto3=new Producto("7 ages","Juego de fichitas","http://www.planetongames.com/7-wonders-p-2430.html");
-        producto1.setCategoria(categoria2);
+        producto3.setCategoria(categoria2);
         producto4=new Producto("Agricola","Juego de gestión","http://www.planetongames.com/agricola-castellano-p-732.html");
-        producto1.setCategoria(categoria3);
+        producto4.setCategoria(categoria3);
         producto5=new Producto("Here I Stand","Juego belico","http://www.planetongames.com/here-stand-2010-reprint-p-329.html");
-        producto1.setCategoria(categoria4);
+        producto5.setCategoria(categoria4);
         
     }
     @Test
-    @Ignore
+    //@Ignore
     public void test_addProducto_ProductoNotExists() {
-        boolean result = producto1.insertarProducto(em);
+        
+        boolean result = categoria1.create(em);
+        
         result = result && producto1.insertarProducto(em);
+        
         assertTrue(result);
         
         assertTrue(Producto.contieneProducto(em, producto1.getId()));
         
-        assertEquals(1, (double)Producto.Contar(em));
-
+        assertEquals(1,(long)Producto.Contar(em));
+        
         assertEquals(producto1, Producto.listarProductoPorId(em, producto1.getId()));
         
     }
     
     @Test
-    @Ignore
+    //@Ignore
     public void test_addProducto_ProductoExists() {
+        categoria1.create(em);
         producto1.insertarProducto(em);
        
         boolean result = producto1.insertarProducto(em);
         assertFalse(result);
 
-        
-        Producto producto6 = producto1.clone();
-        producto6.setId((long)0);
-        result = producto6.insertarProducto(em);
-        
-        assertFalse(result);
-
-        assertEquals(1, (double)Producto.Contar(em));
+        assertEquals(1, (long)Producto.Contar(em));
     }
     
     @Test
-    @Ignore
+    //@Ignore
     public void test_EliminarProducto(){
+        categoria1.create(em);
         producto1.insertarProducto(em);
         boolean resultado=producto1.eliminarProducto(em);
         assertTrue(resultado);
@@ -123,11 +121,15 @@ public class ProductoTest {
         assertFalse(resultado);
         
         assertFalse(Producto.contieneProducto(em, producto1.getId()));
-        assertEquals(0,(double)Producto.Contar(em));
+        assertEquals(0,(long)Producto.Contar(em));
     }
     @Test
-    @Ignore
+    //@Ignore
     public void test_listarProductos(){
+        categoria1.create(em);
+        categoria2.create(em);
+        categoria3.create(em);
+        categoria4.create(em);
         producto1.insertarProducto(em);
         producto2.insertarProducto(em);
         producto3.insertarProducto(em);
@@ -145,7 +147,13 @@ public class ProductoTest {
         assertEquals(esperado,Producto.listarProductos(em));
         
     }
+    @Test
+    //@Ignore
     public void test_listarProductosPorCategoria(){
+        categoria1.create(em);
+        categoria2.create(em);
+        categoria3.create(em);
+        categoria4.create(em);
         producto1.insertarProducto(em);
         producto2.insertarProducto(em);
         producto3.insertarProducto(em);
@@ -160,8 +168,9 @@ public class ProductoTest {
         assertEquals(esperado,Producto.listarProductoPorCategoria(em, categoria1));
     }
     @Test
-    @Ignore
+    //@Ignore
     public void test_EncontrarProductoPorId(){
+        categoria1.create(em);
         producto1.insertarProducto(em);
         producto2.insertarProducto(em);
         
@@ -169,12 +178,11 @@ public class ProductoTest {
         assertEquals(producto1,resultado);
     }
     @Test
-    @Ignore
+    //@Ignore
     public void test_EncontrarProductoPorNombre(){
+        categoria1.create(em);
         producto1.insertarProducto(em);
-        producto1.insertarProducto(em);
-        
-        Producto resultado=Producto.listarProductoPorNombre(em, producto1.getNombre_producto());
-        assertEquals(producto1,resultado);
+        producto2.insertarProducto(em);
+        assertEquals(1,Producto.listarProductoPorNombre(em,producto1.getNombre_producto()).size());
     }
  }
