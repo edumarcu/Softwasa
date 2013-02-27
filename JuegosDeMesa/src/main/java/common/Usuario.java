@@ -221,6 +221,20 @@ public class Usuario implements Serializable  {
         return query.getSingleResult();
     }
     
+        public static Usuario verifyPasswordOfLogin(EntityManager em, String loginUsuario, String passwordUsuario) {
+        String sql = "SELECT x FROM Usuario x WHERE x.loginUsuario = :loginUsuario and x.paswordUsuario = :passwordUsuario";
+        TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);
+        query.setParameter("loginUsuario", loginUsuario);
+        query.setParameter("paswordUsuario", passwordUsuario);
+        try {
+        return query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+        
+    }
+    
+    
        public static List<Usuario> findByUsuario(EntityManager em, String nombreUsuario,String apellido1Usuario,String apellido2Usuario) {
         String sql = "SELECT x FROM Usuario x WHERE x.nombreUsuario LIKE :nombreUsuario AND x.apellido1Usuario LIKE :apellido1Usuario AND x.apellido2Usuario LIKE :apellido2Usuario Order by x.id";
         TypedQuery<Usuario> query = em.createQuery(sql, Usuario.class);

@@ -154,6 +154,19 @@ public class UsuarioTest {
         assertEquals(user2, result);
     }
     
+      public void test_findPasswordOfLogin() {
+        user2.create(em);
+       
+        Usuario result = Usuario.verifyPasswordOfLogin(em, user2.getLoginUsuario(), user2.getPasswordUsuario());
+        assertEquals(user2, result);
+        
+        result = Usuario.verifyPasswordOfLogin(em, user2.getLoginUsuario(), "contraseña");
+        assertNotEquals(user2, result);
+        
+        
+    }
+    
+    
      @Test
     public void test_findByNombreUsuario() {
 
