@@ -143,7 +143,18 @@ public class UsuarioTest {
     }
 
     @Test
+   
+    public void test_findByLoginUsuario() {
+        user1.create(em);
+        user2.create(em);
+        user3.create(em);
+
+        Usuario result = Usuario.findByLoginUsuario(em, user2.getLoginUsuario());
+
+        assertEquals(user2, result);
+    }
     
+     @Test
     public void test_findByNombreUsuario() {
 
         user1.create(em);
