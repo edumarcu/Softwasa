@@ -9,7 +9,7 @@ ENGINE = InnoDB;
 
 CREATE  TABLE IF NOT EXISTS `mydb`.`tb_usuarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `login_usuario`  VARCHAR(50) NOT NULL,
+  `login_usuario`  VARCHAR(50) NOT NULL UNIQUE,
   `password_usuario`  VARCHAR(20) NOT NULL,
   `nombre_usuario`  VARCHAR(50) NOT NULL,
   `apellido1_usuario`  VARCHAR(50) NOT NULL,
