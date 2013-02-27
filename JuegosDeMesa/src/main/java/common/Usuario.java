@@ -279,8 +279,10 @@ public class Usuario implements Serializable  {
     }
 
     public void updateNoTransaction(EntityManager em) {
+        if ( em.find(Usuario.class, this.getId()) != null) {
         em.merge(this);
         em.flush();
+        }
     }
     
     
