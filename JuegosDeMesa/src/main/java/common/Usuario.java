@@ -256,9 +256,36 @@ public class Usuario implements Serializable  {
     }
 
     public void createNoTransaction(EntityManager em) {
+        
         em.persist(this);
         em.flush();
     }
+    
+      public boolean update(EntityManager em) {
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            createNoTransaction(em);
+            et.commit();
+            return true;
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+//            throw new Exception("Error saving user");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void updateNoTransaction(EntityManager em) {
+        em.merge(this);
+        em.flush();
+    }
+    
+    
+    
+    
     
     public boolean remove(EntityManager em) {
         EntityTransaction et = em.getTransaction();

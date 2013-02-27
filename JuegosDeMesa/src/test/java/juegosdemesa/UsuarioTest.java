@@ -23,16 +23,15 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
 public class UsuarioTest {
-    private EntityManager em;
 
+    private EntityManager em;
     private static Usuario user1;
     private static Usuario user2;
     private static Usuario user3;
     private static Usuario user4;
-    
-     @Before
+
+    @Before
     public void beforeTest() throws SQLException, ParseException {
         String url = "jdbc:mysql://127.0.0.1/mydb";
         String user = "root";
@@ -46,18 +45,18 @@ public class UsuarioTest {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("juegosDeMesaPU");
         em = emf.createEntityManager();
         //
-        
-        user1 = new Usuario(1,"user1","clave1","usu1","user1ape1","user1ape2","dire1","11111","uno@gmail.com","Contra Reembolso");
-        user2 = new Usuario(2,"user2","clave2","usu2","user2ape1","user2ape2","dire2","22222","dos@gmail.com","Pay-Pal");
-        user3 = new Usuario(3,"user3","clave3","usu3","user3ape1","user3ape2","dire3","33333","tres@gmail.com","Contra Reembolso");
-        user4 = new Usuario(4,"user4","clave4","usu4","user4ape1","user4ape2","dire4","44444","cuatro@gmail.com","Tarjetao");
+
+        user1 = new Usuario(1, "user1", "clave1", "usu1", "user1ape1", "user1ape2", "dire1", "11111", "uno@gmail.com", "Contra Reembolso");
+        user2 = new Usuario(2, "user2", "clave2", "usu2", "user2ape1", "user2ape2", "dire2", "22222", "dos@gmail.com", "Pay-Pal");
+        user3 = new Usuario(3, "user3", "clave3", "usu3", "user3ape1", "user3ape2", "dire3", "33333", "tres@gmail.com", "Contra Reembolso");
+        user4 = new Usuario(4, "user4", "clave4", "usu4", "user4ape1", "user4ape2", "dire4", "44444", "cuatro@gmail.com", "Tarjetao");
     }
+
+    @Test
     
-        @Test
-  
     public void test_addUsuario_UsuarioNotExists() {
         boolean result = user1.create(em);
-        result = result &&user2.create(em);
+        result = result && user2.create(em);
         assertTrue(result);
 
         assertTrue(Usuario.containsUsuario(em, user2.getId()));
@@ -66,24 +65,44 @@ public class UsuarioTest {
         assertEquals(user2, Usuario.findById(em, user2.getId()));
     }
 
-    @Test
-
-    public void test_addUsuario_UsuarioExists() {     
-        user1.create(em);            
+    @Test   
+    public void test_addUsuario_UsuarioExists() {
+        user1.create(em);
         boolean result = user1.create(em);
-        assertFalse(result);
         
+        assertTrue(result);
+
         Usuario usuario = user1.clone();
         usuario.setId(0);
-        
-        result = usuario.create(em);
-        assertFalse(result);
 
-        assertEquals(1, Usuario.count(em));
-         
+        result = usuario.create(em);
+        assertTrue(result);
+
+        assertEquals(2, Usuario.count(em));
+
     }
-     
-      @Test
+
+    @Test
+    
+    public void test_updateUsuario() {
+
+        boolean result = user1.create(em);
+        assertTrue(result);
+
+        Usuario usuario = user1.clone();
+        usuario.setLoginUsuario("cambiado");
+
+        result = usuario.update(em);
+        assertTrue(result);
+
+        Usuario buscado = Usuario.findById(em, user2.getId());
+
+        assertEquals(usuario, buscado);
+
+    }
+
+    @Test
+    
     public void test_removeBook() {
         user1.create(em);
         boolean result = user1.remove(em);
@@ -95,8 +114,9 @@ public class UsuarioTest {
         assertFalse(Usuario.containsUsuario(em, user1.getId()));
         assertEquals(0, Usuario.count(em));
     }
+
+    @Test
     
-       @Test
     public void test_list() {
 
         user1.create(em);
@@ -109,8 +129,9 @@ public class UsuarioTest {
         assertEquals(3, usuarios.length);
         assertArrayEquals(expected, usuarios);
     }
-    
-         @Test
+
+    @Test
+   
     public void test_findByid() {
         user1.create(em);
         user2.create(em);
@@ -120,7 +141,36 @@ public class UsuarioTest {
 
         assertEquals(user2, result);
     }
-         
-       
-       
+
+    @Test
+    
+    public void test_findByNombreUsuario() {
+
+        user1.create(em);
+        user2.create(em);
+        user3.create(em);
+
+        List<Usuario> expected = new ArrayList<Usuario>();
+       expected.add(user2);
+
+        List<Usuario> usuarios = Usuario.findByNombreUsuario(em, user2.getNombreUsuario());
+        assertEquals(expected, usuarios);
+
+    }
+
+    @Test
+    
+    public void test_findByApellido1Usuario() {
+
+        user1.create(em);
+        user2.create(em);
+        user3.create(em);
+
+        List<Usuario> expected = new ArrayList<Usuario>();
+        expected.add(user2);
+
+        List<Usuario> usuarios = Usuario.findByApellido1Usuario(em, user2.getApellido1Usuario());
+        assertEquals(expected, usuarios);
+
+    }
 }
