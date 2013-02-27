@@ -11,7 +11,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import org.junit.After;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -23,6 +25,7 @@ import org.junit.Test;
  */
 public class CategoriaTest {
 
+    private EntityManagerFactory emf;
     private EntityManager em;
 
     private Categoria jRol, jEle, jPre, jDib, jCla;
@@ -40,14 +43,19 @@ public class CategoriaTest {
 
         conn.close();
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("juegosDeMesaPU");
+        emf = Persistence.createEntityManagerFactory("juegosDeMesaPU");
         em = emf.createEntityManager();
 
         jRol = new Categoria( "Rol", "Hero Quest");
         jEle = new Categoria( "Electrónicos", "Simon");
         jPre = new Categoria("Preguntas", "Trivial");
         jDib = new Categoria( "Dibujar", "Pictionary");
-        jCla = new Categoria("´Clásicos", "Parchis, Oca");
+        jCla = new Categoria("Clásicos", "Parchis, Oca");
+    }
+
+    @After
+    public void afterTest() {
+        emf.close();
     }
 
     /*++++++++++++++++++++++++++++++++++++++++++++++ R */
@@ -112,7 +120,7 @@ public class CategoriaTest {
     public void test_findLikeNombre_categoriaNoExistente() {
         assertFalse(em.contains(jRol));
 
-        List<Categoria> expected = new ArrayList<>();
+        List<Categoria> expected = new ArrayList<Categoria>();
         List<Categoria> actual = Categoria.findLikeNombre(em, "i");
         assertEquals(expected, actual);
     }
@@ -179,7 +187,7 @@ public class CategoriaTest {
     public void test_findLikeDescripcion_categoriaNoExistente() {
         assertFalse(em.contains(jRol));
 
-        List<Categoria> expected = new ArrayList<>();
+        List<Categoria> expected = new ArrayList<Categoria>();
         List<Categoria> actual = Categoria.findLikeDescripcion(em, "i");
         assertEquals(expected, actual);
     }
@@ -260,6 +268,19 @@ public class CategoriaTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void test_hash_toString() {
+        assertTrue(jRol.create(em));
+        System.out.println("jRol= " + jRol + "hashCode= " + jRol.hashCode());
+    }
+
+    @Test
+    public void test_equals() {
+        assertTrue(jRol.create(em));
+        assertFalse(jRol.equals("Rol"));
+        assertFalse(jRol.equals(null));
+    }
+
     /*++++++++++++++++++++++++++++++++++++++++++++++ CUD */
     @Test
     public void test_create_categoriaNoExistente() {
@@ -314,4 +335,27 @@ public class CategoriaTest {
         assertFalse(em.contains(jRol));
     }
 
+    @Test
+    public void test_create_exception() {
+        EntityTransaction et = em.getTransaction();
+        // al estar empezada dará erro en begin
+        et.begin();
+        assertFalse(jRol.create(em));
+    }
+
+    @Test
+    public void test_update_exception() {
+        EntityTransaction et = em.getTransaction();
+        // al estar empezada dará erro en begin
+        et.begin();
+        assertFalse(jRol.update(em));
+    }
+
+    @Test
+    public void test_remove_exception() {
+        EntityTransaction et = em.getTransaction();
+        // al estar empezada dará erro en begin
+        et.begin();
+        assertFalse(jRol.remove(em));
+    }
 }

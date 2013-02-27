@@ -50,12 +50,12 @@ public class Categoria implements Serializable {
         this.descripcion_categoria = descripcion_categoria;
     }
 
-    public Categoria(long id, String nombre_categoria, String descripcion_categoria) {
-        this.id = id;
-        this.nombre_categoria = nombre_categoria;
-        this.descripcion_categoria = descripcion_categoria;
-//        this.productos = null;
-    }
+//    public Categoria(long id, String nombre_categoria, String descripcion_categoria) {
+//        this.id = id;
+//        this.nombre_categoria = nombre_categoria;
+//        this.descripcion_categoria = descripcion_categoria;
+////        this.productos = null;
+//    }
 
     /* Getters and Setters */
 
@@ -63,17 +63,17 @@ public class Categoria implements Serializable {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+//    public void setId(long id) {
+//        this.id = id;
+//    }
 
     public String getNombre_categoria() {
         return nombre_categoria;
     }
 
-    public void setNombre_categoria(String nombre_categoria) {
-        this.nombre_categoria = nombre_categoria;
-    }
+//    public void setNombre_categoria(String nombre_categoria) {
+//        this.nombre_categoria = nombre_categoria;
+//    }
 
     public String getDescripcion_categoria() {
         return descripcion_categoria;
