@@ -12,6 +12,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -83,30 +85,96 @@ public class ProductoTest {
         boolean result = producto1.insertarProducto(em);
         result = result && producto1.insertarProducto(em);
         assertTrue(result);
-        /*
-        assertTrue(Producto.contieneProducto(em, Producto.getId()));
-        assertEquals(1, Producto.Contar(em));
+        
+        assertTrue(Producto.contieneProducto(em, producto1.getId()));
+        
+        assertEquals(1, (double)Producto.Contar(em));
 
-        assertEquals(bhp1, Producto.findById(em, producto1.getId()));
-        * */
+        assertEquals(producto1, Producto.listarProductoPorId(em, producto1.getId()));
+        
     }
-    /*
+    
     @Test
     @Ignore
     public void test_addProducto_ProductoExists() {
-        ajkr.create(em);
-        bhp1.create(em);
-
-        boolean result = bhp1.create(em);
+        producto1.insertarProducto(em);
+       
+        boolean result = producto1.insertarProducto(em);
         assertFalse(result);
 
-        Book book1 = bhp1.clone();
-        book1.setId(0);
-        result = book1.create(em);
+        
+        Producto producto6 = producto1.clone();
+        producto6.setId((long)0);
+        result = producto6.insertarProducto(em);
+        
         assertFalse(result);
 
-        assertEquals(1, Book.count(em));
+        assertEquals(1, (double)Producto.Contar(em));
     }
-   */ 
     
-}
+    @Test
+    @Ignore
+    public void test_EliminarProducto(){
+        producto1.insertarProducto(em);
+        boolean resultado=producto1.eliminarProducto(em);
+        assertTrue(resultado);
+        
+        resultado=producto1.eliminarProducto(em);
+        assertFalse(resultado);
+        
+        assertFalse(Producto.contieneProducto(em, producto1.getId()));
+        assertEquals(0,(double)Producto.Contar(em));
+    }
+    @Test
+    @Ignore
+    public void test_listarProductos(){
+        producto1.insertarProducto(em);
+        producto2.insertarProducto(em);
+        producto3.insertarProducto(em);
+        producto4.insertarProducto(em);
+        producto5.insertarProducto(em);
+        
+        List <Producto> esperado=new ArrayList<Producto>();
+        esperado.add(producto1);
+        esperado.add(producto2);
+        esperado.add(producto3);
+        esperado.add(producto4);
+        esperado.add(producto5);
+        
+        assertEquals(esperado.size(),Producto.listarProductos(em).size());
+        assertEquals(esperado,Producto.listarProductos(em));
+        
+    }
+    public void test_listarProductosPorCategoria(){
+        producto1.insertarProducto(em);
+        producto2.insertarProducto(em);
+        producto3.insertarProducto(em);
+        producto4.insertarProducto(em);
+        producto5.insertarProducto(em);
+        
+        List <Producto> esperado=new ArrayList<Producto>();
+        esperado.add(producto1);
+        esperado.add(producto2);
+        
+        assertEquals(esperado.size(),Producto.listarProductoPorCategoria(em, categoria1).size());
+        assertEquals(esperado,Producto.listarProductoPorCategoria(em, categoria1));
+    }
+    @Test
+    @Ignore
+    public void test_EncontrarProductoPorId(){
+        producto1.insertarProducto(em);
+        producto2.insertarProducto(em);
+        
+        Producto resultado=Producto.listarProductoPorId(em, producto1.getId());
+        assertEquals(producto1,resultado);
+    }
+    @Test
+    @Ignore
+    public void test_EncontrarProductoPorNombre(){
+        producto1.insertarProducto(em);
+        producto1.insertarProducto(em);
+        
+        Producto resultado=Producto.listarProductoPorNombre(em, producto1.getNombre_producto());
+        assertEquals(producto1,resultado);
+    }
+ }

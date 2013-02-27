@@ -116,7 +116,15 @@ public class Producto {
         }
         return true;
     }
-
+    public Producto clone(){
+        Producto producto=new Producto();
+        producto.setId(this.getId());
+        producto.setCategoria(this.getCategoria());
+        producto.setDescripcion_producto(this.getDescripcion_producto());
+        producto.setEnlace_producto(this.getEnlace_producto());
+        producto.setNombre_producto(this.getNombre_producto());
+        return producto;
+    }
     
     public boolean insertarProducto(EntityManager em){
         EntityTransaction et = em.getTransaction();
